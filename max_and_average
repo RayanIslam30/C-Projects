@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+//Code that takes in a series of positive integers and outputs the maximum and average of those numbers. 
+// The program will stop taking input when a negative number is entered.
 int main(void) {
    //declare our variables
    int num;
