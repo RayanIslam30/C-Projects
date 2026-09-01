@@ -9,11 +9,13 @@ int main()
     printf("Enter a digit to count: ");
     fflush(stdout);
     scanf("%d", &digit);
-    while (num > 0) { //loop through each digit of number, see if it matches the digit we are looking for, and increment count if it does
+         //loop through each digit of number, see if it matches the digit we are looking for, and increment count if it does
+    while (num != 0) {
         if (num % 10 == digit) {
             count++;
         }
-        num /= 10;
+        num /= 10; //remove last digit from number, iterate
     }
+    printf("The digit %d appears %d times in the number.\n", digit, count); //print out how many times the digit appears in the number
     return 0;
-}
+}s

@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/rayan/C Projects/C-Projects/integers'
+relocations:     []
+...
