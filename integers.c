@@ -2,7 +2,8 @@
 //Code that takes in a number and a digit from user and outputs how many times that digit appears in the number.
 int main()
 {
-    int num, digit, count = 0;
+    int num, digit;
+    int count = 0; //initialize count to 0
     printf("Enter a number: ");
     fflush(stdout);
     scanf("%d", &num);
