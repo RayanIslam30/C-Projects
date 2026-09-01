@@ -7,5 +7,13 @@ int main()
     fflush(stdout);
     scanf("%d", &num);
     printf("Enter a digit to count: ");
+    fflush(stdout);
+    scanf("%d", &digit);
+    while (num > 0) { //loop through each digit of number, see if it matches the digit we are looking for, and increment count if it does
+        if (num % 10 == digit) {
+            count++;
+        }
+        num /= 10;
+    }
     return 0;
 }
