@@ -12,8 +12,9 @@ int main()
     scanf("%d", &digit);
     //loop through each digit of number, see if it matches the digit we are looking for, and increment count if it does
     int tempNum = num;
-    if ((tempNum == 0) && (tempNum==digit)); //if the number is 0 and the digit is 0, increment count, catch this edge case
+    if ((tempNum == 0) && (tempNum==digit)) { //if the number is 0 and the digit is 0, increment count, catch this edge case
         count++;
+    }
     while (tempNum != 0) {
         if (tempNum % 10 == digit) {
             count++;
