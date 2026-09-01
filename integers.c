@@ -16,6 +16,6 @@ int main()
         }
         num /= 10; //remove last digit from number, iterate
     }
-    printf("The digit %d appears %d times in %d.\n", digit, count, num) //print out how many times the digit appears in the number
+    printf("The digit %d appears %d times in %d\n", digit, count, num); //print out how many times the digit appears in the number
     return 0;
 }
