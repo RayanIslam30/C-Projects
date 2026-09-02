@@ -6,19 +6,17 @@ int main(void) {
 
 
     // Prompt the user for input
-    printf("Enter up to %d integers (press Enter after each integer):\n", NUM_ELEMENTS); // Read the integers from the user
-    
-    for (int i = 0; i < NUM_ELEMENTS; i++) {
+    printf("Enter the number of integers you want to input (up to %d): ", NUM_ELEMENTS);
+    int numIntegers;
+    scanf("%d", &numIntegers);
+
+    for (int i = 0; i < numIntegers; i++) {
         scanf("%d", &userVals[i]);
-        if (getchar() == '\n') { // Check if the user pressed Enter
-            break; // Exit the loop if Enter is pressed
-        }
     }
 
     // Print the integers in reverse order
-    printf("The integers in reverse order are:\n");
-    for (int i = NUM_ELEMENTS - 1; i >= 0; i--) {
-        printf("%d ", userVals[i]);
+    for (int i = numIntegers - 1; i >= 0; i--) {
+        printf("%d,", userVals[i]);
     }
     printf("\n");
 
