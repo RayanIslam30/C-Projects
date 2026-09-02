@@ -18,7 +18,6 @@ int main(void) {
     for (int i = numIntegers - 1; i >= 0; i--) {
         printf("%d,", userVals[i]);
     }
-    printf("\n");
 
    return 0;
 }
