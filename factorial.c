@@ -7,7 +7,7 @@ int main()
     //const int maxDigits = 9;      // will allow up to 9 digits in the input value
     int digits[9] = {0};  // array of digits, initialized to zero
 
-    printf("Enter a decimal integer (>= 1): ");
+    printf("Enter a decimal integer: ");
     fflush(stdout);
     scanf("%d", &userNum);  // input assumed to meet the spec
 
@@ -24,7 +24,7 @@ int main()
 
     // TASK 1 code:
     // print the digits, in order, ones place first, separated by commas, no comma after last digit
-    printf("Digits:%d", digits[digitIndex - 1]); // print the first digit
+    printf("Digits: %d", digits[digitIndex - 1]); // print the first digit
     for (int i = digitIndex - 2; i >= 0; i--){ // loop to print remaining digits)
         printf(",%d", digits[i]); // print each digit with a comma, last digit won't have comma
     }
