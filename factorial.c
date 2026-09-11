@@ -15,6 +15,7 @@ int main()
     // store the digits into an array
     int tempNum = userNum;
     int digitIndex = 0; // index for the digits array
+    int factorialSum = 0; // variable to hold the sum of factorials
     while (tempNum > 0) // loop to store each digit into array
     {
         digits[digitIndex] = tempNum % 10; // get the last digit
@@ -40,11 +41,18 @@ int main()
             factorial *= j;
         }
         printf("%d\n", factorial);
+        factorialSum += factorial; // add the factorial to the sum
     }
-
     // TASK 3 code:
     // print the sum, and whether number is strong
-    int sum = 0;
+    printf("Sum of factorials: %d\n", factorialSum);
+    if (factorialSum == userNum) {
+        printf("The number is a strong number.\n");
+    } else {
+        printf("The number is not a strong number.\n");
+    }
 
+
+    }
     return 0;
 }
