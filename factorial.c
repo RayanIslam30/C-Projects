@@ -25,7 +25,7 @@ int main()
     // TASK 1 code:
     // print the digits, in order, ones place first, separated by commas, no comma after last digit
     printf("Digits:%d", digits[digitIndex - 1]); // print the first digit
-    for (int i = digitIndex - 2; i >= 0; i--) // loop to print remaining digits){
+    for (int i = digitIndex - 2; i >= 0; i--){ // loop to print remaining digits)
         printf(",%d", digits[i]); // print each digit with a comma, last digit won't have comma
     }
     printf("\n"); // print a newline after the digits
