@@ -24,7 +24,7 @@ int main()
     }
 
     // TASK 1 code:
-    // print the digits, in order, ones place first, separated by commas, no comma after last digit
+    // print the digits separated by commas, no comma after last digit
     printf("Digits: %d", digits[digitIndex - 1]); // print the first digit
     for (int i = digitIndex - 2; i >= 0; i--){ // loop to print remaining digits)
         printf(",%d", digits[i]); // print each digit with a comma, last digit won't have comma
@@ -47,12 +47,9 @@ int main()
     // print the sum, and whether number is strong
     printf("Sum of factorials: %d\n", factorialSum);
     if (factorialSum == userNum) {
-        printf("The number is a strong number.\n");
+        printf("%d is a strong number.\n", userNum);
     } else {
-        printf("The number is not a strong number.\n");
-    }
-
-
+        printf("%d is not a strong number.\n", userNum);
     }
     return 0;
 }
