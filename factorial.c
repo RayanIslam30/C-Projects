@@ -31,11 +31,20 @@ int main()
     printf("\n"); // print a newline after the digits
 
     // TASK 2 code:
-    // print the factorial of each digit
+    // print the factorial of each digit, same order as digits
+
+    for (int i = digitIndex - 1; i >= 0; i--) { //loop through the digits
+        printf("%d! = ", digits[i]); 
+        int factorial = 1; // set factorial to 1
+        for (int j = 1; j <= digits[i]; j++) { // loop and find factorial
+            factorial *= j;
+        }
+        printf("%d\n", factorial);
+    }
 
     // TASK 3 code:
     // print the sum, and whether number is strong
-
+    int sum = 0;
 
     return 0;
 }
