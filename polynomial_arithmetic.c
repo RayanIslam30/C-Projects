@@ -84,7 +84,29 @@ const int NOT_IMPLEMENTED = 666;
 // returns 0 if success, 1 if error
 int reduceRational(int x[])
 {
-    return NOT_IMPLEMENTED;
+    //reduce fraction to lowest terms
+    //check for zero denominator
+    if (x[1] == 0)
+    {
+        return 1; // error: denominator is zero
+    }
+    // ensure denominator is positive
+    if (x[1] < 0)
+    {
+        x[0] = -x[0];
+        x[1] = -x[1];
+    }
+    // zero numerator, set denominator to 1
+    if (x[0] == 0)
+    {
+        x[1] = 1;
+        return 0; // success
+    }
+    // find gcd for numerator and denominator
+    int divisor = gcd(x[0], x[1]);
+    x[0] /= divisor;
+    x[1] /= divisor;
+    return 0; // success
 }
 
 // sum = x + y
@@ -92,7 +114,14 @@ int reduceRational(int x[])
 // returns 0 if success, 1 if error
 int addRational(const int x[], const int y[], int sum[])
 {
-    return NOT_IMPLEMENTED;
+    if (x[1] == 0 || y[1] == 0)
+    {
+        return 1; // error: denominator is zero
+    }
+    sum[0] = x[0] * y[1] + y[0] * x[1]; // numerator
+    sum[1] = x[1] * y[1]; // denominator
+    reduceRational(sum);
+    return 0; // success
 }
 
 // diff = x - y
@@ -100,7 +129,14 @@ int addRational(const int x[], const int y[], int sum[])
 // returns 0 if success, 1 if error
 int subRational(const int x[], const int y[], int diff[])
 {
-    return NOT_IMPLEMENTED;
+    if (x[1] == 0 || y[1] == 0)
+    {
+        return 1; // error: denominator is zero
+    }
+    diff[0] = x[0] * y[1] - y[0] * x[1]; // numerator
+    diff[1] = x[1] * y[1]; // denominator
+    reduceRational(diff);
+    return 0; // success
 }
 
 // prod = xy
@@ -108,7 +144,14 @@ int subRational(const int x[], const int y[], int diff[])
 // returns 0 if success, 1 if error
 int mulRational(const int x[], const int y[], int prod[])
 {
-    return NOT_IMPLEMENTED;
+    if (x[1] == 0 || y[1] == 0)
+    {
+        return 1; // error: denominator is zero
+    }
+    prod[0] = x[0] * y[0]; // numerator
+    prod[1] = x[1] * y[1]; // denominator
+    reduceRational(prod);
+    return 0; // success
 }
 
 // quot = x/y (there is no remainder -- result is always a rational number)
