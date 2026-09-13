@@ -180,7 +180,18 @@ int evalPoly(const int p[], const int x[], int val[])
 // returns 0 if success, 1 if error
 int addPoly(const int p1[], const int p2[], int sum[])
 {
-    return NOT_IMPLEMENTED;
+    for (int i = 0; i <= MAX_DEGREE; ++i){
+        int x[2] = {p1[2*i], p1[2*i+1]}; // coefficient of x^i in p1
+        int y[2] = {p2[2*i], p2[2*i+1]}; // coefficient of x^i in p2
+        int s[2]; // empty array to hold the sum of coefficients
+
+        if (addRational(x, y, s) != 0) { // also runs addRational to add the coefficients
+            return 1; // error in rational addition
+        }
+        sum[2*i] = s[0]; // store numerator into sum 
+        sum[2*i+1] = s[1]; // store denominator into sum
+    }
+    return 0; // success
 }
 
 // diff <- p1 - p2
@@ -188,7 +199,18 @@ int addPoly(const int p1[], const int p2[], int sum[])
 // returns 0 if success, 1 if error
 int subPoly(const int p1[], const int p2[], int diff[])
 {
-    return NOT_IMPLEMENTED;
+    for (int i = 0; i <= MAX_DEGREE; ++i){
+        int x[2] = {p1[2*i], p1[2*i+1]}; // coefficient of x^i in p1
+        int y[2] = {p2[2*i], p2[2*i+1]}; // coefficient of x^i in p2
+        int s[2]; // empty array to hold the difference of coefficients
+
+        if (subRational(x, y, s) != 0) { // also runs subRational to subtract the coefficients
+            return 1; // error in rational subtraction
+        }
+        diff[2*i] = s[0]; // store numerator into diff 
+        diff[2*i+1] = s[1]; // store denominator into diff
+    }
+    return 0; // success
 }
 
 // prod <- p1 * p2
@@ -196,7 +218,37 @@ int subPoly(const int p1[], const int p2[], int diff[])
 // returns 0 if success, 2 if result degree is too large, 1 if any other error
 int mulPoly(const int p1[], const int p2[], int prod[])
 {
-    return NOT_IMPLEMENTED;
+    for (int k = 0; k <= MAX_DEGREE; ++k){ // initialize all coefficients of prod to 0/1
+        prod[2*k] = 0; // initialize numerator to 0
+        prod[2*k+1] = 1; // initialize denominator to 1
+    }
+    for (int i = 0; i <= MAX_DEGREE; ++i){
+        int x[2] = {p1[2*i], p1[2*i+1]}; // coefficient of x^i in p1
+    
+    for (int j = 0; j <= MAX_DEGREE; ++j){
+        int y[2] = {p2[2*j], p2[2*j+1]}; // coefficient of x^j in p2
+        int term[2]; // p1 x^i term  * p2 x^j term 
+
+        if (mulRational(x, y, term) != 0) { // also runs mulRational to multiply the coefficients
+            return 1; // error in rational multiplication
+        }
+        int k = i + j; // degree of the resulting term
+        if (k > MAX_DEGREE) {
+            if (term[0] != 0) { // if the term is not zero, then the result degree is too large
+                return 2; // result degree is too large
+            }
+            continue; // if the term is zero, we can ignore it and continue
+        }
+        int current[2] = {prod[2*k], prod[2*k+1]}; // current coefficient of x^k in prod
+        int newSum[2];
+        if (addRational(current, term, newSum) != 0) { // add the new term to the existing term in prod
+            return 1; // error in rational addition
+        }
+        prod[2*k] = newSum[0];
+        prod[2*k+1] = newSum[1];
+    }
+}
+    return 0; // success
 }
 
 // p1/p2, q <- quotient, r <- remainder
