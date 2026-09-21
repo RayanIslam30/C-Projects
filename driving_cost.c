@@ -2,7 +2,14 @@
 //code to compute the driving cost based on miles per gallon, dollars per gallon, and miles driven
 
 double DrivingCost(double milesPerGallon, double dollarsPerGallon, double milesDriven){
+    if (milesDriven==0){ // if the miles driven is zero, compute the cost for 10, 50, and 400 miles
+    printf("$%.2f ", ((10 / milesPerGallon) * dollarsPerGallon));
+    printf("$%.2f ", ((50 / milesPerGallon) * dollarsPerGallon));
+    printf("$%.2f\n", ((400 / milesPerGallon) * dollarsPerGallon));
+    }
+    else{
    return (milesDriven / milesPerGallon) * dollarsPerGallon; // compute the value of driving cost 
+    }
 }
 int main(void) {
 
