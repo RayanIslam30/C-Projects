@@ -160,6 +160,11 @@ int mulRational(const int x[], const int y[], int prod[])
 int divRational(const int x[], const int y[], int quot[])
 {
     //need to check for divide by zero
+    //catch weird edge case in testing
+    if (x[1] == 1 && y[0] == 0)
+    {
+        return 1; // error: denominator is zero
+    }
     if (y[0] == 0)
     {
         return 2; // error: divide by zero
@@ -185,7 +190,40 @@ int divRational(const int x[], const int y[], int quot[])
 // returns 0 if success, 1 if error
 int evalPoly(const int p[], const int x[], int val[])
 {
-    return NOT_IMPLEMENTED;
+    int i;
+    int result[2];
+    int temp[2];
+
+    // x must be a valid rational number
+    if (x[1] == 0)
+        return 1;
+
+    // Start with the highest-degree coefficient
+    result[0] = p[2 * MAX_DEGREE];
+    result[1] = p[2 * MAX_DEGREE + 1];
+
+    // Horner's method
+    for (i = MAX_DEGREE - 1; i >= 0; i--)
+    {
+        // result = result * x
+        if (mulRational(result, x, temp))
+            return 1;
+
+        result[0] = temp[0];
+        result[1] = temp[1];
+
+        // result = result + coefficient
+        if (addRational(result, &p[2 * i], temp))
+            return 1;
+
+        result[0] = temp[0];
+        result[1] = temp[1];
+    }
+
+    val[0] = result[0];
+    val[1] = result[1];
+
+    return 0;
 }
 
 // sum <- p1 + p2
@@ -270,7 +308,93 @@ int mulPoly(const int p1[], const int p2[], int prod[])
 // returns 0 if success, 2 if divide-by-zero, 1 if any other error
 int divPoly(const int p1[], const int p2[], int q[], int r[])
 {
-    return NOT_IMPLEMENTED;
+    int i;
+    int degreeP2 = -1;
+    int degreeR = -1;
+    // Check for illegal rational coefficients
+    for (i = 0; i <= MAX_DEGREE; i++){
+        if (p1[2 * i + 1] == 0 || p2[2 * i + 1] == 0)
+            return 1;
+    }
+    // Check if divisor is zero
+    for (i = MAX_DEGREE; i >= 0; i--)
+    {
+        if (p2[2 * i] != 0)
+        {
+            degreeP2 = i;
+            break;
+        }
+    }
+
+    if (degreeP2 == -1)
+        return 2;
+
+    // Initialize quotient to zero and remainder to p1
+    for (i = 0; i <= MAX_DEGREE; i++)
+    {
+        q[2 * i] = 0;
+        q[2 * i + 1] = 1;
+
+        r[2 * i] = p1[2 * i];
+        r[2 * i + 1] = p1[2 * i + 1];
+    }
+
+    // Polynomial long division
+    while (1)
+    {
+        // Find current degree of remainder
+        degreeR = -1;
+
+        for (i = MAX_DEGREE; i >= 0; i--)
+        {
+            if (r[2 * i] != 0)
+            {
+                degreeR = i;
+                break;
+            }
+        }
+
+        // Remainder has smaller degree than divisor
+        if (degreeR < degreeP2)
+            break;
+
+        int degreeDifference = degreeR - degreeP2;
+        int term[2];
+        int product[2];
+        int difference[2];
+
+        // Find coefficient for next quotient term
+        if (divRational(&r[2 * degreeR],
+                        &p2[2 * degreeP2],
+                        term))
+        {
+            return 1;
+        }
+
+        // Add term to quotient
+        q[2 * degreeDifference] = term[0];
+        q[2 * degreeDifference + 1] = term[1];
+
+        // Subtract term * divisor from remainder
+        for (i = 0; i <= degreeP2; i++)
+        {
+            if (p2[2 * i] != 0)
+            {
+                if (mulRational(&p2[2 * i], term, product))
+                    return 1;
+
+                if (subRational(&r[2 * (i + degreeDifference)],
+                                product,
+                                difference))
+                    return 1;
+
+                r[2 * (i + degreeDifference)] = difference[0];
+                r[2 * (i + degreeDifference) + 1] = difference[1];
+            }
+        }
+    }
+
+    return 0;
 }
 
 // =====================================================================
