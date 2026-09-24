@@ -159,7 +159,20 @@ int mulRational(const int x[], const int y[], int prod[])
 // returns 0 if success, 2 if divide-by-zero, 1 if any other error
 int divRational(const int x[], const int y[], int quot[])
 {
-    return NOT_IMPLEMENTED;
+    //need to check for divide by zero
+    if (y[0] == 0)
+    {
+        return 2; // error: divide by zero
+    }
+    if (x[1] == 0 || y[1] == 0)
+    {
+        return 1; // error: denominator is zero
+    }
+    //need x[0] * y[1] / (x[1] * y[0])
+    quot[0] = x[0] * y[1]; // numerator
+    quot[1] = x[1] * y[0]; // denominator
+    reduceRational(quot);
+    return 0; // success
 }
 
 // Polynomials are represented as fixed-size integer arrays, so the array lengths
