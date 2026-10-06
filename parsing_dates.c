@@ -3,6 +3,8 @@
 
 // code that converts MONTH, DAY, YEAR into mm-dd-yyyy
 
+//takes multiple dates at once, stops with '-1'
+
 
 int GetMonthAsInt(char *monthString) {
 	int monthInt;
