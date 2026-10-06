@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// code that converts many different date formats into a single format (mm-dd-yyyy)
+// code that converts MONTH, DAY, YEAR into mm-dd-yyyy
 
 
 int GetMonthAsInt(char *monthString) {
