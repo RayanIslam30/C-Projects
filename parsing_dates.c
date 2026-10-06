@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 
-// code that converts MONTH, DAY, YEAR into mm-dd-yyyy
+// code that converts MONTH DAY, YEAR into mm-dd-yyyy
 
 //takes multiple dates at once, stops with '-1'
 
 
+//function that converts month string to integer
 int GetMonthAsInt(char *monthString) {
 	int monthInt;
 
@@ -61,6 +62,26 @@ int main(void) {
    char date[100];
    char month[20];
    int day, year, monthInt;
+   //loop to read multiple dates from input
+   while (fgets(date, sizeof(date), stdin) != NULL) {
+
+      // Stop when the line is -1
+      if (strcmp(date, "-1\n") == 0 || strcmp(date, "-1") == 0) {
+         break;
+      }
+
+      // Parse: Month Day, Year
+      // parse works because each part parsed adds 1, so if it returns 3, we know all three parts were parsed
+      if (sscanf(date, "%s %d, %d", month, &day, &year) == 3) {
+         
+         monthInt = GetMonthAsInt(month);
+
+         // Only output if the month is valid
+         if (monthInt != 0) {
+            printf("%d-%d-%d\n", monthInt, day, year);
+         }
+      }
+   }
 
     
 	return 0;
