@@ -55,5 +55,11 @@ int main(void) {
 	// TODO: Read dates from input, parse the dates to find the ones
    //       in the correct format, and output in m-d-yyyy format
 
+   //declare variables to store values
+   char date[100];
+   char month[20];
+   int day, year, monthInt;
+
+    
 	return 0;
 }
