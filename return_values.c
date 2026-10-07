@@ -1,7 +1,13 @@
 #include <stdio.h>
 //take 3 arguments, 1 integer and 2 pointers to integers, and assign the tens digit of the integer to the first pointer and the ones digit to the second pointer
 void digits(int num, int* onesDig, int* tensDig) {  
-    
+    for (int i = 0; i < 2; i++) {
+        if (i == 0) {
+            *onesDig = num % 10;
+        } else {
+            *tensDig = (num / 10) % 10;
+        }
+    }
 }
 int main() {
    int num;
