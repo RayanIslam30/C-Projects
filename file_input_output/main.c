@@ -39,6 +39,7 @@ int main() {
 
 int wordInfo(const char* filename, char *shortest, char *longest, char *lowest, char *highest) {
    // create a local variable large enough to hold one word (see spec for max size)
+   char word[16];
    // NOTE: suggestion is to read one word at a time, not a line
    // You don't need to store all of the words, just one. Process each word as it is read.
 
