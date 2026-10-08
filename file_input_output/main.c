@@ -51,12 +51,13 @@ int wordInfo(const char* filename, char *shortest, char *longest, char *lowest, 
    // read one word at a time, process it, and count the number of words
    // whitespace is ' ', '\n', '\t'
    int count = 0; // initialize word count to 0
-   while (fscanf(fp, "%15s", word) == 1) { 
+   while (fscanf(fp, "%15s", word) == 1) { // read one word at a time, max 15 chars + null terminator
       count++;
       // Task 2: remove punctuation from the end of a word
+      // doesn't remove ' or - from middle of words
       int len = strlen(word);
       while (len > 0 && ispunct(word[len - 1])) {
-         word[len - 1] = '\0';
+         word[len - 1] = '\0'; // moves null terminator back one position, effectively removing the punctuation
          len--;
       }
 
