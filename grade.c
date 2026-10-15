@@ -51,13 +51,13 @@ int main(void) {
    finalExamAvg /= numStudents;
 
     //open output file
-    FILE *outputFile = fopen("report.tsv", "w");
+    FILE *outputFile = fopen("report.txt", "w");
     if (outputFile == NULL) {
         printf("Error opening output file.\n");
         return 1;
     }
     for (int i = 0; i < numStudents; i++) {
-        fprintf(outputFile, "%s\t%s\t%d\t%d\t%d\t%2s\n",
+        fprintf(outputFile, "%s\t%s\t%d\t%d\t%d\t%s\n",
                 lastName[i], firstName[i],
                 midterm1[i], midterm2[i], finalExam[i], grade[i]);
     }
