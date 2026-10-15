@@ -64,7 +64,7 @@ int main(void) {
 
     /* Write exam averages to two decimal places */
     fprintf(outputFile,
-            "\nAverages: midterm1 %.2f, midterm2 %.2f, final %.2f\n",
+            "\nAverages: midterm1 %.2f, midterm2 %.2f, final %.2f",
             midterm1Avg, midterm2Avg, finalExamAvg);
 
     fclose(outputFile);
