@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-//create tsv file with student last name, first name, midterm 1 grade, midterm 2 grade, final exam grade, and final letter grade
+//working with reading and writing files in C
+//create txt file with student last name, first name, midterm 1 grade, midterm 2 grade, final exam grade, and final letter grade
 //at end of file, add overall average for each exam
 int main(void) {
 
