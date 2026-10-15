@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 //create tsv file with student last name, first name, midterm 1 grade, midterm 2 grade, final exam grade, and final letter grade
 //at end of file, add overall average for each exam
 int main(void) {
@@ -50,13 +51,13 @@ int main(void) {
    finalExamAvg /= numStudents;
 
     //open output file
-    FILE *outputFile = fopen("grades_output.tsv", "w");
+    FILE *outputFile = fopen("report.tsv", "w");
     if (outputFile == NULL) {
         printf("Error opening output file.\n");
         return 1;
     }
     for (int i = 0; i < numStudents; i++) {
-        fprintf(outputFile, "%s\t%s\t%d\t%d\t%d\t%c\n",
+        fprintf(outputFile, "%s\t%s\t%d\t%d\t%d\t%2s\n",
                 lastName[i], firstName[i],
                 midterm1[i], midterm2[i], finalExam[i], grade[i]);
     }
