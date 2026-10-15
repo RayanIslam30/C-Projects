@@ -19,7 +19,7 @@ int main(void) {
 
     scanf("%d", &num);
     digits = DigitCount(num);
-    printf("%d\n", digits);
+    printf("%d", digits);
 
     return 0;
 }
