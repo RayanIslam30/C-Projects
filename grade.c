@@ -68,9 +68,5 @@ int main(void) {
 
     fclose(outputFile);
 
-
-
-
-
    return 0;
 }
