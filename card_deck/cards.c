@@ -3,40 +3,87 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// declaration -- copy the definition from the previous task
-// and replace the definition at the end of this file
+// declaration
 static void permute(unsigned int a[], unsigned int n);
 
-// create a new card deck, with cards in sequence from 0 to numCard-1
+// create a new card deck
 CardDeck * createDeck(unsigned int numCards) {
-    return NULL;
+    CardDeck *deck = malloc(sizeof(CardDeck));
+
+    deck->cards = malloc(numCards * sizeof(unsigned int));
+
+    deck->size = numCards;
+    deck->undealt = numCards;
+
+    for (unsigned int i = 0; i < numCards; i++) {
+        deck->cards[i] = i;
+    }
+
+    return deck;
 }
 
-// rearrange deck and reset count, starting from previous shuffled state
+// rearrange deck and reset count
 void shuffleDeck(CardDeck *deck) {
+    deck->undealt = deck->size;
+    permute(deck->cards, deck->size);
 }
 
-// remove a new array and remove cards from the deck (starting at the end of the array)
-// if not enough undealt cards, return NULL
+// deal cards from the end of the array
 unsigned int * deal(CardDeck *deck, unsigned int numCards) {
-    return NULL;
+    if (deck->undealt < numCards) {
+        return NULL;
+    }
+
+    unsigned int *dealt = malloc(numCards * sizeof(unsigned int));
+
+    if (dealt == NULL) {
+        return NULL;
+    }
+
+    for (unsigned int i = 0; i < numCards; i++) {
+        deck->undealt--;
+        dealt[i] = deck->cards[deck->undealt];
+    }
+
+    return dealt;
 }
 
-// no error checking -- if c is too large, string is garbage
+// convert card number to string
 void cardToString(unsigned int c, char* str) {
+    char *suits[] = {"C", "D", "H", "S"};
+    char *ranks[] = {"2", "3", "4", "5", "6", "7",
+                     "8", "9", "10", "J", "Q", "K", "A"};
+
+    unsigned int suit = c / 13;
+    unsigned int rank = c % 13;
+
+    sprintf(str, "%s%s", ranks[rank], suits[suit]);
 }
 
-// use cardToString, then print the resulting string (no space afterward)
+// print one card
 void printCard(unsigned int c) {
+    char str[10];
+    cardToString(c, str);
+    printf("%s", str);
 }
 
-// use printCard to print an array of cards, with space after each
-void printCards(unsigned int * c, unsigned int numCards) {
+// print array of cards
+void printCards(unsigned int *c, unsigned int numCards) {
+    for (unsigned int i = 0; i < numCards; i++) {
+        printCard(c[i]);
+        printf(" ");
+    }
 }
 
-// permute -- rearrange the elements of an array of size n
-// must call rand() and must follow exactly the algorithm in the spec
-// this is static because it is only called in this file
+// permute array
 static void permute(unsigned int a[], unsigned int n) {
-    // your code goes here
+    if (n < 2) return;
+
+    for (unsigned int i = n - 1; i > 0; i--) {
+        unsigned int j = rand() % (i + 1);
+
+        unsigned int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
 }
