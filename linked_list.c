@@ -59,17 +59,40 @@ int IntNode_Length(IntNode* firstNode) {
 
 // Return the Nth element of the list. First node is 1.
 IntNode* IntNode_GetNth(IntNode* firstNode, int pos) {
-   /* Type your code here. */
+    IntNode* currentNode = firstNode;
+    int currentPos = 1;
+    
+    //iterate through list until we find the Nth element, or reach end of list
+    while(currentNode != NULL && currentPos < pos) {
+        currentNode = currentNode->nextNodePtr;
+        ++currentPos;
+    }
+    
+    return currentNode;
+
 }
 
 // Print the entire list starting at firstNode
 void IntNode_PrintList(IntNode* firstNode) {
-   /* Type your code here. */
+    IntNode* currentNode = firstNode;
+    //iterate through list and print each node's data, stop at end of list
+    while(currentNode != NULL) {
+        IntNode_PrintNodeData(currentNode);
+        currentNode = currentNode->nextNodePtr;
+    }
 }
 
 // Sum the numbers in the list
 int IntNode_SumList(IntNode* firstNode) {
-   /* Type your code here. */
+    int sum = 0;
+    IntNode* currentNode = firstNode;
+    //iterate through list and add each node's data to sum, stop at end of list
+    while(currentNode != NULL) {
+        sum += currentNode->dataVal;
+        currentNode = currentNode->nextNodePtr;
+    }
+
+    return sum;
 }
 
 int main(void) {
