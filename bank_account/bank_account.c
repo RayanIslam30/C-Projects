@@ -5,6 +5,7 @@
 //creates a new bank account with the given name and balances
 
 //use the functions from the bank_account.h file to implement the functions in bank_account.c
+
 BankAccount InitBankAccount(char* newName, double chBalance, double sBalance) {
     BankAccount account;
 
