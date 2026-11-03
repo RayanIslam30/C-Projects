@@ -33,7 +33,11 @@ static int usedLetters[26] = {0};
 // If error, return -1. Otherwise, return the number of puzzles.
 int setupGame(const char *puzzleFileName, const char *wheelFileName)
 {
-    // Open puzzle file and wheel file
+    // Free information from a previous setupGame call
+    free(puzzles);
+    puzzles = NULL;
+    numPuzzles = 0;
+
     FILE *puzzleFile = fopen(puzzleFileName, "r");
     if (puzzleFile == NULL) {
         return -1;
@@ -45,28 +49,146 @@ int setupGame(const char *puzzleFileName, const char *wheelFileName)
         return -1;
     }
 
-    // Read exactly 24 wheel values
+    // Read the 24 wheel values into a temporary array
+    int newWheel[NUM_WEDGES];
+
     for (int i = 0; i < NUM_WEDGES; i++) {
-        if (fscanf(wheelFile, "%d", &wheel[i]) != 1) {
+        if (fscanf(wheelFile, "%d", &newWheel[i]) != 1) {
+            fclose(puzzleFile);
+            fclose(wheelFile);
+            return -1;
+        }
+
+        if (newWheel[i] < -1) {
             fclose(puzzleFile);
             fclose(wheelFile);
             return -1;
         }
     }
 
-    // Check for additional non-whitespace content
+    // Make sure there is nothing except whitespace after the 24 values
     char extra;
     if (fscanf(wheelFile, " %c", &extra) == 1) {
         fclose(puzzleFile);
         fclose(wheelFile);
         return -1;
     }
-    
-    //close the puzzle and wheel files
-    fclose(puzzleFile);
+
     fclose(wheelFile);
 
-    return 0; // Temporarily; eventually return numPuzzles
+    // Load puzzles
+    Puzzle *loaded = NULL;
+    int count = 0;
+    char line[MAX_CATEGORY + MAX_PHRASE + 4];
+
+    while (fgets(line, sizeof(line), puzzleFile) != NULL) {
+
+        // Every line must end with a newline
+        char *newline = strchr(line, '\n');
+
+        if (newline == NULL) {
+            free(loaded);
+            fclose(puzzleFile);
+            return -1;
+        }
+
+        *newline = '\0';
+
+        // Handle Windows-style line endings
+        int length = (int)strlen(line);
+
+        if (length > 0 && line[length - 1] == '\r') {
+            line[--length] = '\0';
+        }
+
+        // Find the category/phrase separator
+        char *separator = strchr(line, '/');
+
+        if (separator == NULL) {
+            free(loaded);
+            fclose(puzzleFile);
+            return -1;
+        }
+
+        int categoryLength = (int)(separator - line);
+        int phraseLength = (int)strlen(separator + 1);
+
+        // Validate lengths
+        if (categoryLength > MAX_CATEGORY ||
+            phraseLength > MAX_PHRASE) {
+            free(loaded);
+            fclose(puzzleFile);
+            return -1;
+        }
+
+        // Validate category: all letters must be uppercase
+        for (int i = 0; i < categoryLength; i++) {
+            if (isalpha((unsigned char)line[i]) &&
+                !isupper((unsigned char)line[i])) {
+                free(loaded);
+                fclose(puzzleFile);
+                return -1;
+            }
+        }
+
+        // Validate phrase
+        for (int i = 0; i < phraseLength; i++) {
+            char c = separator[1 + i];
+
+            if (c == '_') {
+                free(loaded);
+                fclose(puzzleFile);
+                return -1;
+            }
+
+            if (isalpha((unsigned char)c) &&
+                !isupper((unsigned char)c)) {
+                free(loaded);
+                fclose(puzzleFile);
+                return -1;
+            }
+        }
+
+        // Allocate space for another puzzle
+        Puzzle *temp = realloc(loaded,
+                               (count + 1) * sizeof(Puzzle));
+
+        if (temp == NULL) {
+            free(loaded);
+            fclose(puzzleFile);
+            return -1;
+        }
+
+        loaded = temp;
+
+        // Copy category
+        memcpy(loaded[count].category, line, categoryLength);
+        loaded[count].category[categoryLength] = '\0';
+
+        // Copy phrase
+        strcpy(loaded[count].solution, separator + 1);
+
+        count++;
+    }
+
+    if (ferror(puzzleFile)) {
+        free(loaded);
+        fclose(puzzleFile);
+        return -1;
+    }
+
+    fclose(puzzleFile);
+
+    // Save successfully loaded information
+    puzzles = loaded;
+    numPuzzles = count;
+
+    // Copy wheel values into the global array
+    for (int i = 0; i < NUM_WEDGES; i++) {
+        wheel[i] = newWheel[i];
+    }
+
+    return numPuzzles;
 }
 
 // setupPuzzle: load information for the specified puzzle number
@@ -139,6 +261,7 @@ int checkSolution(const char *s)
     if (strcasecmp(s, puzzles[currentPuzzle].solution) == 0) {
         return 1;
     }
+    return 0;
 }
 
 // spinWheel: choose a random wedge on the wheel and return its value
@@ -149,12 +272,55 @@ int spinWheel() // select random wheel location, return value
     return wheel[index];
 }
 
+// helper function to use for both chooseVowel and chooseConsonant
+static int chooseLetter(char c, int vowel)
+{
+    // Make sure the character is a letter
+    if (!isalpha((unsigned char)c)) {
+        return -2;
+    }
+
+    // Convert to uppercase
+    c = (char)toupper((unsigned char)c);
+
+    // Determine whether the character is a vowel
+    int isVowel = (c == 'A' || c == 'E' ||
+                   c == 'I' || c == 'O' ||
+                   c == 'U');
+
+    // Check whether the letter is the correct type
+    if (isVowel != vowel) {
+        return -2;
+    }
+
+    // Check whether the letter has already been guessed
+    int index = c - 'A';
+
+    if (usedLetters[index]) {
+        return -1;
+    }
+
+    // Remember that this letter has been guessed
+    usedLetters[index] = 1;
+
+    // Replace matching underscores
+    int matches = 0;
+
+    for (int i = 0; puzzleDisplay[i] != '\0'; i++) {
+        if (puzzles[currentPuzzle].solution[i] == c) {
+            puzzleDisplay[i] = c;
+            matches++;
+        }
+    }
+
+    return matches;
+}
 // chooseVowel: flip matching vowels in the puzzle
 // return -2 if not a vowel, -1 if letter already used
 // otherwise, return the number of matches
 int chooseVowel(char c)
 {
-    return 0;
+    return chooseLetter(c, 1);
 }
 
 // chooseConsonant: flip matching letters in the puzzle
@@ -162,5 +328,5 @@ int chooseVowel(char c)
 // otherwise, return the number of matches
 int chooseConsonant(char c)
 {
-    return 0;
+    return chooseLetter(c, 0);
 }
