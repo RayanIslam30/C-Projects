@@ -7,5 +7,4 @@ unsigned int getRandom(unsigned int limit);
 // initialize pseudorandom number generator
 void seedRandom(unsigned int seed);
 
-
 #endif
