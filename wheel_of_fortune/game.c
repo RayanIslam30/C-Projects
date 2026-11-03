@@ -5,12 +5,33 @@
 #include <ctype.h>
 
 // GLOBAL VARIABLES
+#define MAX_CATEGORY 20
+#define MAX_PHRASE 80
+#define NUM_WEDGES 24
+ 
+//structure to hold puzzle information
+typedef struct {
+    char category[MAX_CATEGORY + 1];
+    char solution[MAX_PHRASE + 1];
+} Puzzle;
+
+static Puzzle *puzzles = NULL;
+static int numPuzzles = 0;
+
+static int wheel[NUM_WEDGES]; //variable to hold the values of the wheel wedges
+
+static unsigned int currentPuzzle = 0; // variable to hold the index of the current puzzle
+
+static char puzzleDisplay[MAX_PHRASE + 1]; //
+
+static int usedLetters[26] = {0};s
 // (good idea to declare as static for file scope)
 
 // setupGame: load information from puzzle and wheel files
 // If error, return -1. Otherwise, return the number of puzzles.
 int setupGame(const char *puzzleFileName, const char *wheelFileName)
 {
+
     return 0;
 }
 
