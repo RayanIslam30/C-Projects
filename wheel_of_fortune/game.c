@@ -22,15 +22,23 @@ static int wheel[NUM_WEDGES]; //variable to hold the values of the wheel wedges
 
 static unsigned int currentPuzzle = 0; // variable to hold the index of the current puzzle
 
-static char puzzleDisplay[MAX_PHRASE + 1]; //
+static char puzzleDisplay[MAX_PHRASE + 1]; //variable to hold the current puzzle display (with underscores for unguessed letters)
 
-static int usedLetters[26] = {0};s
+static int usedLetters[26] = {0};
 // (good idea to declare as static for file scope)
 
 // setupGame: load information from puzzle and wheel files
 // If error, return -1. Otherwise, return the number of puzzles.
 int setupGame(const char *puzzleFileName, const char *wheelFileName)
 {
+    // Load puzzle information from puzzleFileName
+    FILE *file = fopen(puzzleFileName, "r");
+    if (!file) {
+        return -1;
+    }
+
+    // Load wheel values from wheelFileName
+    
 
     return 0;
 }
@@ -47,7 +55,7 @@ int setupPuzzle(unsigned int n) // choose a random puzzle, clear used character 
 // getPuzzleCategory: returns a pointer to the category information of the current puzzle
 const char *getPuzzleCategory()
 {
-    return NULL;
+    return puzzles[currentPuzzle].category;
 }
 
 // getPuzzlePhrase: returns a pointer to the current puzzle phrase
@@ -80,7 +88,9 @@ int checkSolution(const char *s)
 // spinWheel: choose a random wedge on the wheel and return its value
 int spinWheel() // select random wheel location, return value
 {
-    return 0;
+    int index = getRandom(NUM_WEDGES); // get a random index for the wheel
+
+    return wheel[index];
 }
 
 // chooseVowel: flip matching vowels in the puzzle
