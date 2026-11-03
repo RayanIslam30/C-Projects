@@ -246,12 +246,19 @@ const char *getPuzzleSolution()
 // must be printed in alphabetical order, each letter followed by a space
 void printUsedCharacters()
 {
-    // Print all guessed letters in alphabetical order
+    int first = 1;
+
     for (int i = 0; i < 26; i++) {
         if (usedLetters[i]) {
-            printf("%c ", 'A' + i);
+            if (!first) {
+                printf(" ");
+            }
+
+            printf("%c", 'A' + i);
+            first = 0;
         }
     }
+
     printf("\n");
 }
 
