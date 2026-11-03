@@ -76,7 +76,26 @@ int setupPuzzle(unsigned int n) // choose a random puzzle, clear used character 
     //select the puzzle associated with given number n, and set up display and used letters
     currentPuzzle = n;
 
-    return 0;
+    // Clear previously guessed letters
+    for (int i = 0; i < 26; i++) {
+        usedLetters[i] = 0;
+    }
+    // Initialize puzzle display with underscores for unguessed letters
+    int i = 0;
+    while (puzzles[n].solution[i] != '\0') { // loop through each character in puzzle
+        if (isalpha((unsigned char)puzzles[n].solution[i])) { //check if character is a letter
+            puzzleDisplay[i] = '_';
+        }
+        else {
+            puzzleDisplay[i] = puzzles[n].solution[i]; // keep non-letter (spaces, punctuation) as is
+        }
+
+        i++;
+    }
+
+    puzzleDisplay[i] = '\0';
+    
+    return 1;
 }
 
 // getPuzzleCategory: returns a pointer to the category information of the current puzzle
@@ -89,14 +108,14 @@ const char *getPuzzleCategory()
 // This is the version where un-guessed letters are replaced with underscores.
 const char *getPuzzle()
 {
-    return NULL;
+    return puzzleDisplay;
 }
 
 // getPuzzlePhrase: returns a pointer to the current puzzle solution
 // (used for testing, not for cheating!)
 const char *getPuzzleSolution()
 {
-    return NULL;
+    return puzzles[currentPuzzle].solution;
 }
 
 // printUsedCharacters: print all character that have been guessed in this round
