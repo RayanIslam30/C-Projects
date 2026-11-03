@@ -73,6 +73,9 @@ int setupGame(const char *puzzleFileName, const char *wheelFileName)
 // Return 1 if success, 0 if error.
 int setupPuzzle(unsigned int n) // choose a random puzzle, clear used character list
 {
+    //select the puzzle associated with given number n, and set up display and used letters
+    currentPuzzle = n;
+
     return 0;
 }
 
