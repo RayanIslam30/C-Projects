@@ -38,12 +38,12 @@ int setupGame(const char *puzzleFileName, const char *wheelFileName)
     puzzles = NULL;
     numPuzzles = 0;
 
-    FILE *puzzleFile = fopen(puzzleFileName, "r");
+    FILE *puzzleFile = fopen(puzzleFileName, "r"); // open puzzle file for reading
     if (puzzleFile == NULL) {
         return -1;
     }
 
-    FILE *wheelFile = fopen(wheelFileName, "r");
+    FILE *wheelFile = fopen(wheelFileName, "r"); // open wheel file for reading
     if (wheelFile == NULL) {
         fclose(puzzleFile);
         return -1;
@@ -52,14 +52,14 @@ int setupGame(const char *puzzleFileName, const char *wheelFileName)
     // Read the 24 wheel values into a temporary array
     int newWheel[NUM_WEDGES];
 
-    for (int i = 0; i < NUM_WEDGES; i++) {
+    for (int i = 0; i < NUM_WEDGES; i++) { // loop through each wedge and read its value from the file
         if (fscanf(wheelFile, "%d", &newWheel[i]) != 1) {
             fclose(puzzleFile);
             fclose(wheelFile);
             return -1;
         }
 
-        if (newWheel[i] < -1) {
+        if (newWheel[i] < -1) { // check if the value is valid (must be -1 or greater)
             fclose(puzzleFile);
             fclose(wheelFile);
             return -1;
