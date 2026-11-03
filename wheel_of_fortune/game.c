@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <strings.h>
 
 // GLOBAL VARIABLES
 #define MAX_CATEGORY 20
@@ -94,7 +96,7 @@ int setupPuzzle(unsigned int n) // choose a random puzzle, clear used character 
     }
 
     puzzleDisplay[i] = '\0';
-    
+
     return 1;
 }
 
@@ -122,13 +124,21 @@ const char *getPuzzleSolution()
 // must be printed in alphabetical order, each letter followed by a space
 void printUsedCharacters()
 {
-    return; // not yet implemented
+    // Print all guessed letters in alphabetical order
+    for (int i = 0; i < 26; i++) {
+        if (usedLetters[i]) {
+            printf("%c ", 'A' + i);
+        }
+    }
+    printf("\n");
 }
 
 // checkSolution: compare s to the puzzle solution (case-insensitive)
 int checkSolution(const char *s)
 {
-    return 0;
+    if (strcasecmp(s, puzzles[currentPuzzle].solution) == 0) {
+        return 1;
+    }
 }
 
 // spinWheel: choose a random wedge on the wheel and return its value
