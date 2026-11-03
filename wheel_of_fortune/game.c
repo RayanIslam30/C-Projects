@@ -265,12 +265,24 @@ void printUsedCharacters()
 // checkSolution: compare s to the puzzle solution (case-insensitive)
 int checkSolution(const char *s)
 {
-    if (strcasecmp(s, puzzles[currentPuzzle].solution) == 0) {
-        return 1;
+    if (s == NULL) {
+        return 0;
     }
-    return 0;
-}
 
+    const char *solution = puzzles[currentPuzzle].solution;
+
+    while (*s != '\0' && *solution != '\0') { // loop through each character in the input string and the solution string, check if they match (case-insensitive)
+        if (toupper((unsigned char)*s) !=
+            toupper((unsigned char)*solution)) {
+            return 0;
+        }
+
+        s++;
+        solution++;
+    }
+
+    return (*s == '\0' && *solution == '\0'); 
+}
 // spinWheel: choose a random wedge on the wheel and return its value
 int spinWheel() // select random wheel location, return value
 {
