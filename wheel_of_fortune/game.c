@@ -31,16 +31,40 @@ static int usedLetters[26] = {0};
 // If error, return -1. Otherwise, return the number of puzzles.
 int setupGame(const char *puzzleFileName, const char *wheelFileName)
 {
-    // Load puzzle information from puzzleFileName
-    FILE *file = fopen(puzzleFileName, "r");
-    if (!file) {
+    // Open puzzle file and wheel file
+    FILE *puzzleFile = fopen(puzzleFileName, "r");
+    if (puzzleFile == NULL) {
         return -1;
     }
 
-    // Load wheel values from wheelFileName
-    
+    FILE *wheelFile = fopen(wheelFileName, "r");
+    if (wheelFile == NULL) {
+        fclose(puzzleFile);
+        return -1;
+    }
 
-    return 0;
+    // Read exactly 24 wheel values
+    for (int i = 0; i < NUM_WEDGES; i++) {
+        if (fscanf(wheelFile, "%d", &wheel[i]) != 1) {
+            fclose(puzzleFile);
+            fclose(wheelFile);
+            return -1;
+        }
+    }
+
+    // Check for additional non-whitespace content
+    char extra;
+    if (fscanf(wheelFile, " %c", &extra) == 1) {
+        fclose(puzzleFile);
+        fclose(wheelFile);
+        return -1;
+    }
+    
+    //close the puzzle and wheel files
+    fclose(puzzleFile);
+    fclose(wheelFile);
+
+    return 0; // Temporarily; eventually return numPuzzles
 }
 
 // setupPuzzle: load information for the specified puzzle number
