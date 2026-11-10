@@ -147,8 +147,7 @@ struct widgetNode *popNode(struct widgetList *theList) {
 
 // TASK 2: Insert a node into a list sorted by color
 
-void insertNodeByColor(struct widgetList *theList,
-                       struct widgetNode *node) {
+void insertNodeByColor(struct widgetList *theList, struct widgetNode *node) {
 
     if (theList->head == NULL ||
         widgetCompareColor(node->w, theList->head->w) <= 0) {
@@ -190,8 +189,7 @@ void sortByColor(struct widgetList *theList) {
 
 // TASK 3: Insert a node into a list sorted by shape
 
-void insertNodeByShape(struct widgetList *theList,
-                       struct widgetNode *node) {
+void insertNodeByShape(struct widgetList *theList, struct widgetNode *node) {
 
     if (theList->head == NULL ||
         widgetCompareShape(node->w, theList->head->w) <= 0) {
