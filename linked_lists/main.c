@@ -18,7 +18,14 @@ int main(void) {
    // in other words, 16 pink squares, 16 lavender squares, 16 white squares, 16 pink triangles, ...
 
    struct widgetList wList = {NULL, 0};  // create empty list
-   // add code here to create and append widgets to wList
+   for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 3; j++) {
+         for (int k = 0; k < 16; k++) {
+            Widget w = createWidget(shapes[i], palette[j]);
+            appendWidget(&wList, w);
+        }
+      }
+   }
 
 
    // You can use printWidgetList to test your code, but it won't be used
