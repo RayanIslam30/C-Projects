@@ -110,7 +110,7 @@ void appendWidget(struct widgetList* theList, Widget w) {
 
 // TASK 2
 // suggestion: implement the following two functions first
-struct widgetNode * popNode(struct widgetList* theList);  // remove and return first node
+struct widgetNode * popNode(struct widgetList* theList)  // remove and return first node
 {
     if (theList->head == NULL) {
         return NULL;
@@ -125,7 +125,31 @@ struct widgetNode * popNode(struct widgetList* theList);  // remove and return f
 
     return node;
 }
-void insertNodeByColor(struct widgetList * theList, struct widgetNode *node);  // insert a node into sorted list
+void insertNodeByColor(struct widgetList *theList, struct widgetNode *node) // insert a node into sorted list
+{
+    // Insert at beginning if list is empty or node belongs first
+    if (theList->head == NULL ||
+        widgetCompareColor(node->w, theList->head->w) <= 0) {
+
+        node->next = theList->head;
+        theList->head = node;
+    }
+    else {
+        struct widgetNode *current = theList->head;
+
+        // Find the correct insertion position
+        while (current->next != NULL &&
+               widgetCompareColor(node->w, current->next->w) > 0) {
+
+            current = current->next;
+        }
+
+        node->next = current->next;
+        current->next = node;
+    }
+
+    theList->count++;
+}
 
 // NOTE: Comparison functions are provided in widget.h
 
