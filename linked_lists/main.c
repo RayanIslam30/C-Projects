@@ -2,116 +2,134 @@
 #include <stdlib.h>
 #include "widget.h"
 #include "random.h"
-#include "pt5.h"  // list structs and function declarations for test code
+#include "pt5.h"
+
+// Helper function prototypes
+struct widgetNode *popNode(struct widgetList *theList);
+
+void insertNodeByColor(struct widgetList *theList,
+                       struct widgetNode *node);
+
+void insertNodeByShape(struct widgetList *theList,
+                       struct widgetNode *node);
 
 int main(void) {
-   int status = 0;
-   const char * shapes[4] = {"square", "triangle", "circle", "hexagon"};
-   initWidgetShapes(shapes, 4);
-   const unsigned int palette[3] = {0xffccff, // pink
-                                    0xe5ccff, // lavender
-                                    0xffffff  // white
-                                    };
-   int numWidgets = 16*12;  // 16 of each color+shape combination
+    int status = 0;
 
-   // TASK 1: use appendWidget to create a list of widgets
-   // include 16 widgets of each color+shape combination listed above
-   // in other words, 16 pink squares, 16 lavender squares, 16 white squares, 16 pink triangles, ...
+    const char *shapes[4] = {
+        "square", "triangle", "circle", "hexagon"
+    };
 
-   struct widgetList wList = {NULL, 0};  // create empty list
-   for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 3; j++) {
-         for (int k = 0; k < 16; k++) {
-            Widget w = createWidget(shapes[i], palette[j]);
-            appendWidget(&wList, w);
+    initWidgetShapes(shapes, 4);
+
+    const unsigned int palette[3] = {
+        0xffccff,  // pink
+        0xe5ccff,  // lavender
+        0xffffff   // white
+    };
+
+    // TASK 1: Create 16 widgets of each color and shape combination
+
+    struct widgetList wList = {NULL, 0};
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 16; k++) {
+                Widget w = createWidget(shapes[i], palette[j]);
+                appendWidget(&wList, w);
+            }
         }
-      }
-   }
+    }
 
+    status = checkTask1(&wList, 16, shapes, 4, palette, 3);
 
-   // You can use printWidgetList to test your code, but it won't be used
-   // in the testing functions.
+    printf("TASK 1: ");
+    if (status == 1) {
+        printf("PASSED\n");
+    }
+    else {
+        printf("FAILED\n");
+    }
 
-   // after creating the list, this function will test whether
-   // the list is correct
-   status = checkTask1(&wList, 16, shapes, 4, palette, 3);
-   printf("TASK 1: ");
-   if (status == 1) {
-      printf("PASSED\n");
-   }
-   else {
-      printf("FAILED\n");
-   }
+    // TASK 2: Create a list of 50 random widgets
 
-   // TASK 2: use appendWidget to create a list of 50 random widgets
-   seedRandom("Willy Wonka's Widget Factory");
-   struct widgetList rList = {NULL, 0};  // creating an initial list
-   // add code here to create and add widgets to rList
+    seedRandom("Willy Wonka's Widget Factory");
 
-   // this list will not be tested -- assumed to be correct since you passed Task 1
+    struct widgetList rList = {NULL, 0};
 
-   // sort the list by color only
-   sortByColor(&rList);
+    for (int i = 0; i < 50; i++) {
+        Widget w = createRandomWidget();
+        appendWidget(&rList, w);
+    }
 
-   status = 0;
-   status = checkTask2(&rList);
-   printf("TASK 2: ");
-   if (status == 1) {
-      printf("PASSED\n");
-   }
-   else {
-      printf("FAILED\n");
-   }
+    // Sort the list by color
 
-   // TASK 3: sort the same list by shape
+    sortByColor(&rList);
 
-   sortByShape(&rList);
+    status = checkTask2(&rList);
 
-   status = 0;
-   status = checkTask3(&rList);
-   printf("TASK 3: ");
-   if (status == 1) {
-      printf("PASSED\n");
-   }
-   else {
-      printf("FAILED\n");
-   }
+    printf("TASK 2: ");
+    if (status == 1) {
+        printf("PASSED\n");
+    }
+    else {
+        printf("FAILED\n");
+    }
 
-   return 0;
+    // TASK 3: Sort the same list by shape
+
+    sortByShape(&rList);
+
+    status = checkTask3(&rList);
+
+    printf("TASK 3: ");
+    if (status == 1) {
+        printf("PASSED\n");
+    }
+    else {
+        printf("FAILED\n");
+    }
+
+    return 0;
 }
 
-// TASK 1
-void appendWidget(struct widgetList* theList, Widget w) {
-   struct widgetNode *newNode = malloc(sizeof(struct widgetNode));
 
-    if (newNode == NULL || w == NULL) { // check for memory allocation failure or NULL widget
-        free(newNode);
+// TASK 1: Append a widget to the end of the list
+
+void appendWidget(struct widgetList *theList, Widget w) {
+    if (w == NULL) {
         return;
     }
 
-    newNode->w = w; // assign widget to new node
-    newNode->next = NULL; // assign next pointer to NULL
+    struct widgetNode *newNode = malloc(sizeof(struct widgetNode));
 
-    if (theList->head == NULL) { // if list is empty, set head to new node
+    if (newNode == NULL) {
+        return;
+    }
+
+    newNode->w = w;
+    newNode->next = NULL;
+
+    if (theList->head == NULL) {
         theList->head = newNode;
     }
-    else { // if list is not empty, traverse to the end and append new node
+    else {
         struct widgetNode *current = theList->head;
 
-        while (current->next != NULL) { // find the last node in the list
+        while (current->next != NULL) {
             current = current->next;
         }
 
-        current->next = newNode; // append new node to the end of the list
+        current->next = newNode;
     }
 
-    theList->count++; // increment the count of nodes in the list
+    theList->count++;
 }
 
-// TASK 2
-// suggestion: implement the following two functions first
-struct widgetNode * popNode(struct widgetList* theList)  // remove and return first node
-{
+
+// TASK 2: Remove and return the first node
+
+struct widgetNode *popNode(struct widgetList *theList) {
     if (theList->head == NULL) {
         return NULL;
     }
@@ -125,9 +143,13 @@ struct widgetNode * popNode(struct widgetList* theList)  // remove and return fi
 
     return node;
 }
-void insertNodeByColor(struct widgetList *theList, struct widgetNode *node) // insert a node into sorted list
-{
-    // Insert at beginning if list is empty or node belongs first
+
+
+// TASK 2: Insert a node into a list sorted by color
+
+void insertNodeByColor(struct widgetList *theList,
+                       struct widgetNode *node) {
+
     if (theList->head == NULL ||
         widgetCompareColor(node->w, theList->head->w) <= 0) {
 
@@ -137,7 +159,6 @@ void insertNodeByColor(struct widgetList *theList, struct widgetNode *node) // i
     else {
         struct widgetNode *current = theList->head;
 
-        // Find the correct insertion position
         while (current->next != NULL &&
                widgetCompareColor(node->w, current->next->w) > 0) {
 
@@ -151,9 +172,10 @@ void insertNodeByColor(struct widgetList *theList, struct widgetNode *node) // i
     theList->count++;
 }
 
-// NOTE: Comparison functions are provided in widget.h
 
-void sortByColor(struct widgetList* theList) {
+// TASK 2: Sort the list by color
+
+void sortByColor(struct widgetList *theList) {
     struct widgetList sortedList = {NULL, 0};
 
     struct widgetNode *node;
@@ -162,15 +184,48 @@ void sortByColor(struct widgetList* theList) {
         insertNodeByColor(&sortedList, node);
     }
 
-    // Replace original list with sorted list
     *theList = sortedList;
 }
 
-// TASK 3
-// suggestion: implement the following function first
-void insertNodeByShape(struct widgetList * theList, struct widgetNode *node);  // insert a node into sorted list
 
-// NOTE: Comparison functions are provided in widget.h
+// TASK 3: Insert a node into a list sorted by shape
 
-void sortByShape(struct widgetList* theList) {}
+void insertNodeByShape(struct widgetList *theList,
+                       struct widgetNode *node) {
 
+    if (theList->head == NULL ||
+        widgetCompareShape(node->w, theList->head->w) <= 0) {
+
+        node->next = theList->head;
+        theList->head = node;
+    }
+    else {
+        struct widgetNode *current = theList->head;
+
+        while (current->next != NULL &&
+               widgetCompareShape(node->w, current->next->w) > 0) {
+
+            current = current->next;
+        }
+
+        node->next = current->next;
+        current->next = node;
+    }
+
+    theList->count++;
+}
+
+
+// TASK 3: Sort the list by shape
+
+void sortByShape(struct widgetList *theList) {
+    struct widgetList sortedList = {NULL, 0};
+
+    struct widgetNode *node;
+
+    while ((node = popNode(theList)) != NULL) {
+        insertNodeByShape(&sortedList, node);
+    }
+
+    *theList = sortedList;
+}
