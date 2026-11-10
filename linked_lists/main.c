@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "widget.h"
 #include "random.h"
 #include "pt5.h"  // list structs and function declarations for test code
@@ -110,6 +111,20 @@ void appendWidget(struct widgetList* theList, Widget w) {
 // TASK 2
 // suggestion: implement the following two functions first
 struct widgetNode * popNode(struct widgetList* theList);  // remove and return first node
+{
+    if (theList->head == NULL) {
+        return NULL;
+    }
+
+    struct widgetNode *node = theList->head;
+
+    theList->head = node->next;
+    node->next = NULL;
+
+    theList->count--;
+
+    return node;
+}
 void insertNodeByColor(struct widgetList * theList, struct widgetNode *node);  // insert a node into sorted list
 
 // NOTE: Comparison functions are provided in widget.h
