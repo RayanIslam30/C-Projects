@@ -80,7 +80,32 @@ int main(void) {
 }
 
 // TASK 1
-void appendWidget(struct widgetList* theList, Widget w) {}
+void appendWidget(struct widgetList* theList, Widget w) {
+   struct widgetNode *newNode = malloc(sizeof(struct widgetNode));
+
+    if (newNode == NULL || w == NULL) { // check for memory allocation failure or NULL widget
+        free(newNode);
+        return;
+    }
+
+    newNode->w = w; // assign widget to new node
+    newNode->next = NULL; // assign next pointer to NULL
+
+    if (theList->head == NULL) { // if list is empty, set head to new node
+        theList->head = newNode;
+    }
+    else { // if list is not empty, traverse to the end and append new node
+        struct widgetNode *current = theList->head;
+
+        while (current->next != NULL) { // find the last node in the list
+            current = current->next;
+        }
+
+        current->next = newNode; // append new node to the end of the list
+    }
+
+    theList->count++; // increment the count of nodes in the list
+}
 
 // TASK 2
 // suggestion: implement the following two functions first
