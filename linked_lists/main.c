@@ -153,7 +153,18 @@ void insertNodeByColor(struct widgetList *theList, struct widgetNode *node) // i
 
 // NOTE: Comparison functions are provided in widget.h
 
-void sortByColor(struct widgetList* theList) {}
+void sortByColor(struct widgetList* theList) {
+    struct widgetList sortedList = {NULL, 0};
+
+    struct widgetNode *node;
+
+    while ((node = popNode(theList)) != NULL) {
+        insertNodeByColor(&sortedList, node);
+    }
+
+    // Replace original list with sorted list
+    *theList = sortedList;
+}
 
 // TASK 3
 // suggestion: implement the following function first
